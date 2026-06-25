@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "purpose": "TradeOrigin SCF — Demo party ID registry",
+    "version": "1.1.0",
+    "lastUpdated": "2026-06-25",
+    "notes": "Pakistan-local demo entities. Use these IDs consistently across prototype JSON, views, and demo scripts."
+  },
+
+  "idScheme": {
+    "supplier": { "prefix": "SUP", "format": "SUP-NNN", "example": "SUP-001" },
+    "buyer":    { "prefix": "BUY", "format": "BUY-NNN", "example": "BUY-001" },
+    "bank":     { "prefix": "BNK", "format": "BNK-NNN", "example": "BNK-001" }
+  },
+
+  "defaultDemoPersonas": {
+    "supplier": "SUP-001",
+    "buyer": "BUY-001",
+    "funder": "BNK-001"
+  },
+
+  "programRule": "One program has exactly one buyer. All suppliers and banks are enrolled into a program.",
+
+  "suppliers": [
+    {
+      "id": "SUP-001",
+      "type": "Supplier",
+      "companyName": "Al-Hamd Industries (Pvt.) Ltd.",
+      "pocName": "Ahmed Hassan",
+      "designation": "Finance Manager",
+      "email": "ahmed.hassan@alhamdindustries.pk",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "SUP-002",
+      "type": "Supplier",
+      "companyName": "Kohinoor Textile Mills Ltd.",
+      "pocName": "Fatima Khan",
+      "designation": "Treasury Manager",
+      "email": "fatima.khan@kohinoortextiles.pk",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "SUP-003",
+      "type": "Supplier",
+      "companyName": "Sapphire Electronics (Pvt.) Ltd.",
+      "pocName": "Usman Malik",
+      "designation": "Finance Controller",
+      "email": "usman.malik@sapphireelectronics.pk",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "SUP-004",
+      "type": "Supplier",
+      "companyName": "Shifa Packaging (Pvt.) Ltd.",
+      "pocName": "Ayesha Siddiqui",
+      "designation": "Accounts Manager",
+      "email": "ayesha.siddiqui@shifapackaging.pk",
+      "country": "Pakistan",
+      "status": "active"
+    }
+  ],
+
+  "buyers": [
+    {
+      "id": "BUY-001",
+      "type": "Buyer",
+      "companyName": "Atlas Manufacturing (Pvt.) Ltd.",
+      "pocName": "Kamran Sheikh",
+      "designation": "Head of Procurement",
+      "email": "kamran.sheikh@atlasmfg.pk",
+      "country": "Pakistan",
+      "status": "active"
+    }
+  ],
+
+  "banks": [
+    {
+      "id": "BNK-001",
+      "type": "Bank",
+      "companyName": "Habib Bank Limited",
+      "pocName": "Sara Ahmed",
+      "designation": "Relationship Manager",
+      "email": "sara.ahmed@hbl.com",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "BNK-002",
+      "type": "Bank",
+      "companyName": "Meezan Bank Limited",
+      "pocName": "Bilal Raza",
+      "designation": "Trade Finance Manager",
+      "email": "bilal.raza@meezanbank.com",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "BNK-003",
+      "type": "Bank",
+      "companyName": "Bank Alfalah Limited",
+      "pocName": "Hina Qureshi",
+      "designation": "Corporate Banking Manager",
+      "email": "hina.qureshi@bankalfalah.com",
+      "country": "Pakistan",
+      "status": "active"
+    }
+  ],
+
+  "lookup": {
+    "SUP-001": { "entityType": "supplier", "label": "Al-Hamd Industries (Pvt.) Ltd." },
+    "SUP-002": { "entityType": "supplier", "label": "Kohinoor Textile Mills Ltd." },
+    "SUP-003": { "entityType": "supplier", "label": "Sapphire Electronics (Pvt.) Ltd." },
+    "SUP-004": { "entityType": "supplier", "label": "Shifa Packaging (Pvt.) Ltd." },
+    "BUY-001": { "entityType": "buyer", "label": "Atlas Manufacturing (Pvt.) Ltd." },
+    "BNK-001": { "entityType": "bank", "label": "Habib Bank Limited" },
+    "BNK-002": { "entityType": "bank", "label": "Meezan Bank Limited" },
+    "BNK-003": { "entityType": "bank", "label": "Bank Alfalah Limited" }
+  }
+}

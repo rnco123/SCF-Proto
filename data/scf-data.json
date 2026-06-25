@@ -1,0 +1,452 @@
+{
+  "meta": {
+    "product": "TradeOrigin SCF",
+    "version": "0.1.0",
+    "currency": "USD",
+    "lastUpdated": "2026-06-25"
+  },
+
+  "entityRegistry": "data/demo-ids.json",
+
+  "rules": {
+    "oneProgramOneBuyer": true,
+    "description": "Each SCF program belongs to exactly one buyer. Suppliers and banks are enrolled into a program — they do not exist outside program context."
+  },
+
+  "parties": {
+    "supplier": {
+      "id": "SUP-001",
+      "name": "Al-Hamd Industries (Pvt.) Ltd.",
+      "role": "supplier",
+      "country": "Pakistan",
+      "industry": "Industrial Manufacturing",
+      "contact": "Ahmed Hassan",
+      "designation": "Finance Manager",
+      "email": "ahmed.hassan@alhamdindustries.pk"
+    },
+    "buyer": {
+      "id": "BUY-001",
+      "name": "Atlas Manufacturing (Pvt.) Ltd.",
+      "role": "buyer",
+      "country": "Pakistan",
+      "industry": "Manufacturing",
+      "contact": "Kamran Sheikh",
+      "designation": "Head of Procurement",
+      "email": "kamran.sheikh@atlasmfg.pk"
+    },
+    "funder": {
+      "id": "BNK-001",
+      "name": "Habib Bank Limited",
+      "role": "funder",
+      "country": "Pakistan",
+      "type": "Bank",
+      "contact": "Sara Ahmed",
+      "designation": "Relationship Manager",
+      "email": "sara.ahmed@hbl.com"
+    }
+  },
+
+  "programs": [
+    {
+      "id": "PRG-001",
+      "name": "Atlas Supplier Finance Program",
+      "buyerId": "BUY-001",
+      "type": "reverse_factoring",
+      "status": "active",
+      "limit": 5000000,
+      "utilized": 2847500,
+      "currency": "USD",
+      "maxTenor": 90,
+      "discountRate": 4.25,
+      "startDate": "2025-01-15",
+      "description": "Reverse factoring program — buyer Apex Manufacturing, funded by enrolled banks.",
+      "enrolledSupplierIds": ["SUP-001", "SUP-002", "SUP-003"],
+      "enrolledFunderIds": ["BNK-001", "BNK-002", "BNK-003"]
+    },
+    {
+      "id": "PRG-002",
+      "name": "Atlas Dynamic Discounting Pool",
+      "buyerId": "BUY-001",
+      "type": "dynamic_discounting",
+      "status": "active",
+      "limit": 2000000,
+      "utilized": 890000,
+      "currency": "USD",
+      "maxTenor": 60,
+      "discountRate": 3.80,
+      "startDate": "2025-06-01",
+      "description": "Buyer-funded early payment — same buyer, suppliers enrolled separately from PRG-001.",
+      "enrolledSupplierIds": ["SUP-001", "SUP-004"],
+      "enrolledFunderIds": []
+    }
+  ],
+
+  "invoices": [
+    {
+      "id": "INV-2026-0142",
+      "supplierId": "SUP-001",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "AI-8847",
+      "poNumber": "APEX-PO-22901",
+      "amount": 245000,
+      "currency": "USD",
+      "issueDate": "2026-05-28",
+      "dueDate": "2026-08-26",
+      "status": "approved",
+      "description": "Electronic components — Q2 shipment batch 3",
+      "lineItems": 24,
+      "approvedDate": "2026-06-02",
+      "approvedBy": "Kamran Sheikh",
+      "fundingStatus": null,
+      "discountOffer": {
+        "rate": 4.25,
+        "earlyPaymentDate": "2026-06-30",
+        "discountAmount": 2143.75,
+        "netProceeds": 242856.25
+      }
+    },
+    {
+      "id": "INV-2026-0138",
+      "supplierId": "SUP-001",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "AI-8821",
+      "poNumber": "APEX-PO-22856",
+      "amount": 187500,
+      "currency": "USD",
+      "issueDate": "2026-05-15",
+      "dueDate": "2026-08-13",
+      "status": "funded",
+      "description": "PCB assemblies — production run 7",
+      "lineItems": 18,
+      "approvedDate": "2026-05-20",
+      "approvedBy": "Kamran Sheikh",
+      "fundingStatus": "disbursed",
+      "fundedDate": "2026-05-22",
+      "fundedAmount": 184218.75,
+      "funderId": "BNK-001",
+      "discountOffer": {
+        "rate": 4.25,
+        "earlyPaymentDate": "2026-05-22",
+        "discountAmount": 3281.25,
+        "netProceeds": 184218.75
+      }
+    },
+    {
+      "id": "INV-2026-0151",
+      "supplierId": "SUP-001",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "AI-8892",
+      "poNumber": "APEX-PO-22945",
+      "amount": 312000,
+      "currency": "USD",
+      "issueDate": "2026-06-10",
+      "dueDate": "2026-09-08",
+      "status": "pending",
+      "description": "Sensor modules — IoT product line",
+      "lineItems": 32,
+      "approvedDate": null,
+      "approvedBy": null,
+      "fundingStatus": null,
+      "discountOffer": null
+    },
+    {
+      "id": "INV-2026-0145",
+      "supplierId": "SUP-001",
+      "buyerId": "BUY-001",
+      "programId": "PRG-002",
+      "invoiceNumber": "AI-8855",
+      "poNumber": "APEX-PO-22912",
+      "amount": 95000,
+      "currency": "USD",
+      "issueDate": "2026-06-01",
+      "dueDate": "2026-07-31",
+      "status": "approved",
+      "description": "Packaging materials — seasonal stock",
+      "lineItems": 8,
+      "approvedDate": "2026-06-05",
+      "approvedBy": "Kamran Sheikh",
+      "fundingStatus": null,
+      "discountOffer": {
+        "rate": 3.80,
+        "earlyPaymentDate": "2026-06-25",
+        "discountAmount": 603.50,
+        "netProceeds": 94396.50
+      }
+    },
+    {
+      "id": "INV-2026-0129",
+      "supplierId": "SUP-001",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "AI-8798",
+      "poNumber": "APEX-PO-22790",
+      "amount": 156000,
+      "currency": "USD",
+      "issueDate": "2026-04-20",
+      "dueDate": "2026-07-19",
+      "status": "paid",
+      "description": "Connector assemblies — standard order",
+      "lineItems": 15,
+      "approvedDate": "2026-04-25",
+      "approvedBy": "Kamran Sheikh",
+      "fundingStatus": "settled",
+      "fundedDate": "2026-04-28",
+      "fundedAmount": 153390,
+      "funderId": "BNK-001",
+      "paidDate": "2026-07-19",
+      "discountOffer": {
+        "rate": 4.25,
+        "earlyPaymentDate": "2026-04-28",
+        "discountAmount": 2610,
+        "netProceeds": 153390
+      }
+    },
+    {
+      "id": "INV-2026-0156",
+      "supplierId": "SUP-002",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "NT-4421",
+      "poNumber": "APEX-PO-22967",
+      "amount": 428000,
+      "currency": "USD",
+      "issueDate": "2026-06-18",
+      "dueDate": "2026-09-16",
+      "status": "pending",
+      "description": "Textile fabrics — autumn collection",
+      "lineItems": 45,
+      "approvedDate": null,
+      "approvedBy": null,
+      "fundingStatus": null,
+      "discountOffer": null,
+      "supplierName": "Kohinoor Textile Mills Ltd."
+    },
+    {
+      "id": "INV-2026-0148",
+      "supplierId": "SUP-003",
+      "buyerId": "BUY-001",
+      "programId": "PRG-001",
+      "invoiceNumber": "PE-1102",
+      "poNumber": "APEX-PO-22930",
+      "amount": 275000,
+      "currency": "USD",
+      "issueDate": "2026-06-05",
+      "dueDate": "2026-09-03",
+      "status": "approved",
+      "description": "Aluminum extrusions — store fixtures",
+      "lineItems": 22,
+      "approvedDate": "2026-06-10",
+      "approvedBy": "Kamran Sheikh",
+      "fundingStatus": "requested",
+      "discountOffer": {
+        "rate": 4.25,
+        "earlyPaymentDate": "2026-06-28",
+        "discountAmount": 2406.25,
+        "netProceeds": 272593.75
+      },
+      "supplierName": "Sapphire Electronics (Pvt.) Ltd."
+    }
+  ],
+
+  "suppliers": [
+    {
+      "id": "SUP-001",
+      "name": "Al-Hamd Industries (Pvt.) Ltd.",
+      "pocName": "Ahmed Hassan",
+      "designation": "Finance Manager",
+      "country": "Pakistan",
+      "status": "active",
+      "enrolledPrograms": ["PRG-001", "PRG-002"],
+      "totalInvoiced": 1245000,
+      "totalFunded": 337608.75,
+      "avgPaymentDays": 42,
+      "riskRating": "low"
+    },
+    {
+      "id": "SUP-002",
+      "name": "Kohinoor Textile Mills Ltd.",
+      "pocName": "Fatima Khan",
+      "designation": "Treasury Manager",
+      "country": "Pakistan",
+      "status": "active",
+      "enrolledPrograms": ["PRG-001"],
+      "totalInvoiced": 2100000,
+      "totalFunded": 890000,
+      "avgPaymentDays": 55,
+      "riskRating": "medium"
+    },
+    {
+      "id": "SUP-003",
+      "name": "Sapphire Electronics (Pvt.) Ltd.",
+      "pocName": "Usman Malik",
+      "designation": "Finance Controller",
+      "country": "Pakistan",
+      "status": "active",
+      "enrolledPrograms": ["PRG-001"],
+      "totalInvoiced": 980000,
+      "totalFunded": 450000,
+      "avgPaymentDays": 38,
+      "riskRating": "low"
+    },
+    {
+      "id": "SUP-004",
+      "name": "Shifa Packaging (Pvt.) Ltd.",
+      "pocName": "Ayesha Siddiqui",
+      "designation": "Accounts Manager",
+      "country": "Pakistan",
+      "status": "active",
+      "enrolledPrograms": ["PRG-002"],
+      "totalInvoiced": 620000,
+      "totalFunded": 210000,
+      "avgPaymentDays": 48,
+      "riskRating": "low"
+    }
+  ],
+
+  "banks": [
+    {
+      "id": "BNK-001",
+      "name": "Habib Bank Limited",
+      "pocName": "Sara Ahmed",
+      "designation": "Relationship Manager",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "BNK-002",
+      "name": "Meezan Bank Limited",
+      "pocName": "Bilal Raza",
+      "designation": "Trade Finance Manager",
+      "country": "Pakistan",
+      "status": "active"
+    },
+    {
+      "id": "BNK-003",
+      "name": "Bank Alfalah Limited",
+      "pocName": "Hina Qureshi",
+      "designation": "Corporate Banking Manager",
+      "country": "Pakistan",
+      "status": "active"
+    }
+  ],
+
+  "fundingOpportunities": [
+    {
+      "id": "FO-001",
+      "invoiceId": "INV-2026-0142",
+      "supplierName": "Al-Hamd Industries (Pvt.) Ltd.",
+      "buyerName": "Atlas Manufacturing (Pvt.) Ltd.",
+      "amount": 245000,
+      "discountRate": 4.25,
+      "tenor": 57,
+      "expectedYield": 2143.75,
+      "programId": "PRG-001",
+      "status": "available",
+      "submittedDate": "2026-06-10"
+    },
+    {
+      "id": "FO-002",
+      "invoiceId": "INV-2026-0148",
+      "supplierName": "Sapphire Electronics (Pvt.) Ltd.",
+      "buyerName": "Atlas Manufacturing (Pvt.) Ltd.",
+      "amount": 275000,
+      "discountRate": 4.25,
+      "tenor": 67,
+      "expectedYield": 2406.25,
+      "programId": "PRG-001",
+      "status": "pending_review",
+      "submittedDate": "2026-06-15"
+    },
+    {
+      "id": "FO-003",
+      "invoiceId": "INV-2026-0145",
+      "supplierName": "Al-Hamd Industries (Pvt.) Ltd.",
+      "buyerName": "Atlas Manufacturing (Pvt.) Ltd.",
+      "amount": 95000,
+      "discountRate": 3.80,
+      "tenor": 36,
+      "expectedYield": 603.50,
+      "programId": "PRG-002",
+      "status": "available",
+      "submittedDate": "2026-06-08"
+    }
+  ],
+
+  "activities": [
+    {
+      "id": "ACT-001",
+      "type": "invoice_submitted",
+      "title": "Invoice AI-8892 submitted for approval",
+      "party": "Al-Hamd Industries (Pvt.) Ltd.",
+      "timestamp": "2026-06-10T09:30:00Z",
+      "roles": ["supplier", "buyer"]
+    },
+    {
+      "id": "ACT-002",
+      "type": "invoice_approved",
+      "title": "Invoice AI-8847 approved by Atlas Manufacturing",
+      "party": "Atlas Manufacturing (Pvt.) Ltd.",
+      "timestamp": "2026-06-02T14:15:00Z",
+      "roles": ["supplier", "buyer", "funder"]
+    },
+    {
+      "id": "ACT-003",
+      "type": "funding_requested",
+      "title": "Early payment requested on INV-2026-0148",
+      "party": "Sapphire Electronics (Pvt.) Ltd.",
+      "timestamp": "2026-06-15T11:00:00Z",
+      "roles": ["funder", "supplier"]
+    },
+    {
+      "id": "ACT-004",
+      "type": "funds_disbursed",
+      "title": "$184,218.75 disbursed for invoice AI-8821",
+      "party": "Habib Bank Limited",
+      "timestamp": "2026-05-22T16:45:00Z",
+      "roles": ["supplier", "funder"]
+    },
+    {
+      "id": "ACT-005",
+      "type": "invoice_submitted",
+      "title": "Invoice NT-4421 submitted — $428,000",
+      "party": "Kohinoor Textile Mills Ltd.",
+      "timestamp": "2026-06-18T08:20:00Z",
+      "roles": ["buyer"]
+    },
+    {
+      "id": "ACT-006",
+      "type": "settlement",
+      "title": "Invoice AI-8798 settled at maturity",
+      "party": "Atlas Manufacturing (Pvt.) Ltd.",
+      "timestamp": "2026-07-19T00:00:00Z",
+      "roles": ["funder", "buyer"]
+    }
+  ],
+
+  "navigation": {
+    "supplier": [
+      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
+      { "id": "invoices", "label": "My Invoices", "icon": "file-text" },
+      { "id": "early-payment", "label": "Early Payment", "icon": "zap" },
+      { "id": "programs", "label": "Programs", "icon": "layers" }
+    ],
+    "buyer": [
+      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
+      { "id": "approvals", "label": "Approvals", "icon": "check-circle" },
+      { "id": "invoices", "label": "All Invoices", "icon": "file-text" },
+      { "id": "suppliers", "label": "Suppliers", "icon": "users" },
+      { "id": "add-supplier", "label": "Add Supplier", "icon": "user-plus" },
+      { "id": "add-bank", "label": "Add Bank", "icon": "landmark" },
+      { "id": "programs", "label": "Programs", "icon": "layers" }
+    ],
+    "funder": [
+      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
+      { "id": "opportunities", "label": "Opportunities", "icon": "trending-up" },
+      { "id": "portfolio", "label": "Portfolio", "icon": "briefcase" },
+      { "id": "programs", "label": "Programs", "icon": "layers" }
+    ]
+  }
+}
