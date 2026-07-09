@@ -1,9 +1,9 @@
 {
   "meta": {
     "product": "TradeOrigin SCF",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "currency": "USD",
-    "lastUpdated": "2026-06-25"
+    "lastUpdated": "2026-07-03"
   },
 
   "entityRegistry": "data/demo-ids.json",
@@ -20,7 +20,7 @@
       "role": "supplier",
       "country": "Pakistan",
       "industry": "Industrial Manufacturing",
-      "contact": "Ahmed Hassan",
+      "contact": "Ronaldo",
       "designation": "Finance Manager",
       "email": "ahmed.hassan@alhamdindustries.pk"
     },
@@ -30,7 +30,7 @@
       "role": "buyer",
       "country": "Pakistan",
       "industry": "Manufacturing",
-      "contact": "Kamran Sheikh",
+      "contact": "Messi",
       "designation": "Head of Procurement",
       "email": "kamran.sheikh@atlasmfg.pk"
     },
@@ -59,7 +59,7 @@
       "maxTenor": 90,
       "discountRate": 4.25,
       "startDate": "2025-01-15",
-      "description": "Reverse factoring program — buyer Apex Manufacturing, funded by enrolled banks.",
+      "description": "Reverse factoring program — buyer Atlas Manufacturing, funded by enrolled banks.",
       "enrolledSupplierIds": ["SUP-001", "SUP-002", "SUP-003"],
       "enrolledFunderIds": ["BNK-001", "BNK-002", "BNK-003"]
     },
@@ -78,6 +78,26 @@
       "description": "Buyer-funded early payment — same buyer, suppliers enrolled separately from PRG-001.",
       "enrolledSupplierIds": ["SUP-001", "SUP-004"],
       "enrolledFunderIds": []
+    },
+    {
+      "id": "PRG-003",
+      "name": "ABC Retail SCF Program",
+      "buyerId": "BUY-002",
+      "type": "buyer_initiated_scf",
+      "status": "active",
+      "limit": 50000000,
+      "utilized": 2250000,
+      "currency": "PKR",
+      "maxTenor": 90,
+      "discountRate": 18.5,
+      "recourse": "without_recourse",
+      "pricing": "agreed",
+      "chargesOn": "buyer",
+      "startDate": "2026-06-01",
+      "activationDate": "2026-06-05",
+      "description": "Buyer-initiated SCF program — ABC Retail, funded by Easypaisa Digital Bank. Without recourse, agreed pricing, charges on buyer.",
+      "enrolledSupplierIds": ["SUP-005"],
+      "enrolledFunderIds": ["BNK-004"]
     }
   ],
 
@@ -97,7 +117,7 @@
       "description": "Electronic components — Q2 shipment batch 3",
       "lineItems": 24,
       "approvedDate": "2026-06-02",
-      "approvedBy": "Kamran Sheikh",
+      "approvedBy": "Messi",
       "fundingStatus": null,
       "discountOffer": {
         "rate": 4.25,
@@ -121,7 +141,7 @@
       "description": "PCB assemblies — production run 7",
       "lineItems": 18,
       "approvedDate": "2026-05-20",
-      "approvedBy": "Kamran Sheikh",
+      "approvedBy": "Messi",
       "fundingStatus": "disbursed",
       "fundedDate": "2026-05-22",
       "fundedAmount": 184218.75,
@@ -167,7 +187,7 @@
       "description": "Packaging materials — seasonal stock",
       "lineItems": 8,
       "approvedDate": "2026-06-05",
-      "approvedBy": "Kamran Sheikh",
+      "approvedBy": "Messi",
       "fundingStatus": null,
       "discountOffer": {
         "rate": 3.80,
@@ -191,7 +211,7 @@
       "description": "Connector assemblies — standard order",
       "lineItems": 15,
       "approvedDate": "2026-04-25",
-      "approvedBy": "Kamran Sheikh",
+      "approvedBy": "Messi",
       "fundingStatus": "settled",
       "fundedDate": "2026-04-28",
       "fundedAmount": 153390,
@@ -239,7 +259,7 @@
       "description": "Aluminum extrusions — store fixtures",
       "lineItems": 22,
       "approvedDate": "2026-06-10",
-      "approvedBy": "Kamran Sheikh",
+      "approvedBy": "Messi",
       "fundingStatus": "requested",
       "discountOffer": {
         "rate": 4.25,
@@ -248,6 +268,109 @@
         "netProceeds": 272593.75
       },
       "supplierName": "Sapphire Electronics (Pvt.) Ltd."
+    },
+    {
+      "id": "INV-PKR-001",
+      "supplierId": "SUP-005",
+      "buyerId": "BUY-002",
+      "programId": "PRG-003",
+      "invoiceNumber": "INV-001",
+      "poNumber": "ABC-PO-30001",
+      "amount": 1000000,
+      "currency": "PKR",
+      "issueDate": "2026-07-01",
+      "dueDate": "2026-09-30",
+      "status": "approved",
+      "description": "Food supply — July batch",
+      "lineItems": 12,
+      "approvedDate": "2026-07-03",
+      "approvedBy": "Cristiano Ronaldo",
+      "fundingStatus": null,
+      "discountOffer": {
+        "rate": 3.5,
+        "earlyPaymentDate": "2026-07-10",
+        "discountAmount": 8750,
+        "netProceeds": 991250
+      },
+      "supplierName": "XYZ Foods (Pvt.) Ltd."
+    },
+    {
+      "id": "INV-PKR-002",
+      "supplierId": "SUP-005",
+      "buyerId": "BUY-002",
+      "programId": "PRG-003",
+      "invoiceNumber": "INV-002",
+      "poNumber": "ABC-PO-30002",
+      "amount": 750000,
+      "currency": "PKR",
+      "issueDate": "2026-07-05",
+      "dueDate": "2026-10-15",
+      "status": "approved",
+      "description": "Beverage stock — monthly order",
+      "lineItems": 8,
+      "approvedDate": "2026-07-03",
+      "approvedBy": "Cristiano Ronaldo",
+      "fundingStatus": null,
+      "discountOffer": {
+        "rate": 3.5,
+        "earlyPaymentDate": "2026-07-10",
+        "discountAmount": 6562.5,
+        "netProceeds": 743437.5
+      },
+      "supplierName": "XYZ Foods (Pvt.) Ltd."
+    },
+    {
+      "id": "INV-PKR-003",
+      "supplierId": "SUP-005",
+      "buyerId": "BUY-002",
+      "programId": "PRG-003",
+      "invoiceNumber": "INV-003",
+      "poNumber": "ABC-PO-30003",
+      "amount": 500000,
+      "currency": "PKR",
+      "issueDate": "2026-07-08",
+      "dueDate": "2026-10-31",
+      "status": "approved",
+      "description": "Packaging consumables",
+      "lineItems": 5,
+      "approvedDate": "2026-07-03",
+      "approvedBy": "Cristiano Ronaldo",
+      "fundingStatus": null,
+      "discountOffer": {
+        "rate": 3.5,
+        "earlyPaymentDate": "2026-07-10",
+        "discountAmount": 4375,
+        "netProceeds": 495625
+      },
+      "supplierName": "XYZ Foods (Pvt.) Ltd."
+    },
+    {
+      "id": "INV-PKR-004",
+      "supplierId": "SUP-005",
+      "buyerId": "BUY-002",
+      "programId": "PRG-003",
+      "invoiceNumber": "INV-004",
+      "poNumber": "ABC-PO-30004",
+      "amount": 850000,
+      "currency": "PKR",
+      "issueDate": "2026-06-08",
+      "dueDate": "2026-09-08",
+      "status": "funded",
+      "description": "Frozen goods — June delivery",
+      "lineItems": 6,
+      "approvedDate": "2026-06-09",
+      "approvedBy": "Cristiano Ronaldo",
+      "fundingStatus": "disbursed",
+      "fundedDate": "2026-06-15",
+      "fundedAmount": 850000,
+      "funderId": "BNK-004",
+      "discountOffer": {
+        "rate": 3.5,
+        "earlyPaymentDate": "2026-06-15",
+        "discountAmount": 7437.5,
+        "netProceeds": 842562.5
+      },
+      "supplierName": "XYZ Foods (Pvt.) Ltd."
     }
   ],
 
@@ -255,7 +378,7 @@
     {
       "id": "SUP-001",
       "name": "Al-Hamd Industries (Pvt.) Ltd.",
-      "pocName": "Ahmed Hassan",
+      "pocName": "Ronaldo",
       "designation": "Finance Manager",
       "country": "Pakistan",
       "status": "active",
@@ -268,7 +391,7 @@
     {
       "id": "SUP-002",
       "name": "Kohinoor Textile Mills Ltd.",
-      "pocName": "Fatima Khan",
+      "pocName": "Ronaldo",
       "designation": "Treasury Manager",
       "country": "Pakistan",
       "status": "active",
@@ -281,7 +404,7 @@
     {
       "id": "SUP-003",
       "name": "Sapphire Electronics (Pvt.) Ltd.",
-      "pocName": "Usman Malik",
+      "pocName": "Ronaldo",
       "designation": "Finance Controller",
       "country": "Pakistan",
       "status": "active",
@@ -294,7 +417,7 @@
     {
       "id": "SUP-004",
       "name": "Shifa Packaging (Pvt.) Ltd.",
-      "pocName": "Ayesha Siddiqui",
+      "pocName": "Ronaldo",
       "designation": "Accounts Manager",
       "country": "Pakistan",
       "status": "active",
@@ -302,6 +425,19 @@
       "totalInvoiced": 620000,
       "totalFunded": 210000,
       "avgPaymentDays": 48,
+      "riskRating": "low"
+    },
+    {
+      "id": "SUP-005",
+      "name": "XYZ Foods (Pvt.) Ltd.",
+      "pocName": "Lionel Messi",
+      "designation": "Finance Director",
+      "country": "Pakistan",
+      "status": "active",
+      "enrolledPrograms": ["PRG-003"],
+      "totalInvoiced": 2250000,
+      "totalFunded": 0,
+      "avgPaymentDays": 90,
       "riskRating": "low"
     }
   ],
@@ -330,6 +466,121 @@
       "designation": "Corporate Banking Manager",
       "country": "Pakistan",
       "status": "active"
+    },
+    {
+      "id": "BNK-004",
+      "name": "Easypaisa Digital Bank",
+      "pocName": "Khurram Khan",
+      "designation": "Head of Trade Finance",
+      "country": "Pakistan",
+      "status": "active",
+      "kycStatus": "approved",
+      "financingLimit": 30000000,
+      "agreedRate": 18.5
+    }
+  ],
+
+  "transactions": [
+    {
+      "id": "TXN-001",
+      "programId": "PRG-003",
+      "buyerId": "BUY-002",
+      "supplierId": "SUP-005",
+      "funderId": "BNK-004",
+      "invoiceIds": ["INV-PKR-001", "INV-PKR-002", "INV-PKR-003"],
+      "totalAmount": 2250000,
+      "currency": "PKR",
+      "discountRate": 18.5,
+      "chargesOn": "buyer",
+      "status": "submitted",
+      "createdDate": "2026-07-01",
+      "submittedDate": "2026-07-01",
+      "approvedDate": null,
+      "disbursedDate": null,
+      "closedDate": null,
+      "repaymentStatus": {
+        "INV-PKR-001": "pending",
+        "INV-PKR-002": "pending",
+        "INV-PKR-003": "pending"
+      },
+      "timeline": [
+        { "stage": "Program Created", "date": "2026-06-01", "completed": true },
+        { "stage": "Supplier Invited", "date": "2026-06-01", "completed": true },
+        { "stage": "Funder Onboarded", "date": "2026-06-05", "completed": true },
+        { "stage": "Program Activated", "date": "2026-06-05", "completed": true },
+        { "stage": "Transaction Created", "date": "2026-07-01", "completed": true },
+        { "stage": "Funder Approved", "date": null, "completed": false },
+        { "stage": "Funds Disbursed", "date": null, "completed": false },
+        { "stage": "Repaying", "date": null, "completed": false },
+        { "stage": "Transaction Closed", "date": null, "completed": false }
+      ]
+    },
+    {
+      "id": "TXN-002",
+      "programId": "PRG-003",
+      "buyerId": "BUY-002",
+      "supplierId": "SUP-005",
+      "funderId": "BNK-004",
+      "invoiceIds": ["INV-PKR-004"],
+      "totalAmount": 850000,
+      "currency": "PKR",
+      "discountRate": 18.5,
+      "chargesOn": "buyer",
+      "status": "repaying",
+      "createdDate": "2026-06-10",
+      "submittedDate": "2026-06-10",
+      "approvedDate": "2026-06-12",
+      "disbursedDate": "2026-06-15",
+      "closedDate": null,
+      "repaymentStatus": {
+        "INV-PKR-004": "pending"
+      },
+      "timeline": [
+        { "stage": "Program Created", "date": "2026-06-01", "completed": true },
+        { "stage": "Supplier Invited", "date": "2026-06-01", "completed": true },
+        { "stage": "Funder Onboarded", "date": "2026-06-05", "completed": true },
+        { "stage": "Program Activated", "date": "2026-06-05", "completed": true },
+        { "stage": "Transaction Created", "date": "2026-06-10", "completed": true },
+        { "stage": "Funder Approved", "date": "2026-06-12", "completed": true },
+        { "stage": "Funds Disbursed", "date": "2026-06-15", "completed": true },
+        { "stage": "Repaying", "date": "2026-06-15", "completed": true },
+        { "stage": "Transaction Closed", "date": null, "completed": false }
+      ]
+    }
+  ],
+
+  "invitations": [
+    {
+      "id": "INVT-001",
+      "programId": "PRG-003",
+      "type": "supplier",
+      "entityId": "SUP-005",
+      "entityName": "XYZ Foods (Pvt.) Ltd.",
+      "status": "accepted",
+      "sentDate": "2026-06-01",
+      "acceptedDate": "2026-06-03",
+      "message": "You are invited to join the ABC Retail SCF Program as a supplier. Accept to add your bank account details.",
+      "bankAccount": {
+        "bankName": "Bank Al Habib",
+        "branchCode": "0123",
+        "accountNumber": "0123-1234567890",
+        "accountTitle": "XYZ Foods (Pvt.) Ltd.",
+        "iban": "PK36BAHL0123001234567890"
+      }
+    },
+    {
+      "id": "INVT-002",
+      "programId": "PRG-003",
+      "type": "funder",
+      "entityId": "BNK-004",
+      "entityName": "Easypaisa Digital Bank",
+      "status": "accepted",
+      "sentDate": "2026-06-01",
+      "acceptedDate": "2026-06-04",
+      "message": "Easypaisa Digital Bank is invited to fund the ABC Retail SCF Program. Complete KYC and set your financing limit.",
+      "kycStatus": "approved",
+      "financingLimit": 30000000,
+      "agreedRate": 18.5
     }
   ],
 
@@ -376,6 +627,38 @@
   ],
 
   "activities": [
+    {
+      "id": "ACT-010",
+      "type": "funds_disbursed",
+      "title": "PKR 850,000 disbursed to XYZ Foods for TXN-002",
+      "party": "Easypaisa Digital Bank",
+      "timestamp": "2026-06-15T14:30:00Z",
+      "roles": ["supplier", "funder", "buyer"]
+    },
+    {
+      "id": "ACT-007",
+      "type": "transaction_submitted",
+      "title": "SCF Transaction TXN-001 submitted — PKR 2,250,000",
+      "party": "ABC Retail (Pvt.) Ltd.",
+      "timestamp": "2026-07-01T10:00:00Z",
+      "roles": ["buyer", "funder", "supplier"]
+    },
+    {
+      "id": "ACT-008",
+      "type": "program_activated",
+      "title": "ABC Retail SCF Program activated with Easypaisa Digital Bank",
+      "party": "ABC Retail (Pvt.) Ltd.",
+      "timestamp": "2026-06-05T09:00:00Z",
+      "roles": ["buyer", "funder", "supplier"]
+    },
+    {
+      "id": "ACT-009",
+      "type": "invitation_accepted",
+      "title": "XYZ Foods accepted invite to ABC Retail SCF Program",
+      "party": "XYZ Foods (Pvt.) Ltd.",
+      "timestamp": "2026-06-03T11:30:00Z",
+      "roles": ["buyer", "supplier"]
+    },
     {
       "id": "ACT-001",
       "type": "invoice_submitted",
@@ -428,25 +711,14 @@
 
   "navigation": {
     "supplier": [
-      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
-      { "id": "invoices", "label": "My Invoices", "icon": "file-text" },
-      { "id": "early-payment", "label": "Early Payment", "icon": "zap" },
-      { "id": "programs", "label": "Programs", "icon": "layers" }
+      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" }
     ],
     "buyer": [
-      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
-      { "id": "approvals", "label": "Approvals", "icon": "check-circle" },
-      { "id": "invoices", "label": "All Invoices", "icon": "file-text" },
-      { "id": "suppliers", "label": "Suppliers", "icon": "users" },
-      { "id": "add-supplier", "label": "Add Supplier", "icon": "user-plus" },
-      { "id": "add-bank", "label": "Add Bank", "icon": "landmark" },
-      { "id": "programs", "label": "Programs", "icon": "layers" }
+      { "id": "transactions", "label": "Transactions", "icon": "repeat" },
+      { "id": "programs", "label": "Manage Program", "icon": "layers" }
     ],
     "funder": [
-      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" },
-      { "id": "opportunities", "label": "Opportunities", "icon": "trending-up" },
-      { "id": "portfolio", "label": "Portfolio", "icon": "briefcase" },
-      { "id": "programs", "label": "Programs", "icon": "layers" }
+      { "id": "dashboard", "label": "Dashboard", "icon": "layout-dashboard" }
     ]
   }
 }

@@ -4,9 +4,10 @@ let _state = {};
 
 async function loadData() {
   if (_data) return _data;
+  const cacheBust = Date.now();
   const [scfRes, idsRes] = await Promise.all([
-    fetch('data/scf-data.json'),
-    fetch('data/demo-ids.json'),
+    fetch(`data/scf-data.json?v=${cacheBust}`),
+    fetch(`data/demo-ids.json?v=${cacheBust}`),
   ]);
   _data = await scfRes.json();
   _demoIds = await idsRes.json();
@@ -340,6 +341,82 @@ function getAvailableBanksForProgram(programId) {
   return _data.banks.filter((b) => !enrolled.has(b.id));
 }
 
+function getAvailableSuppliersForProgram(programId) {
+  const program = getProgramById(programId);
+  if (!program) return [];
+  const enrolled = new Set(program.enrolledSupplierIds || []);
+  return _data.suppliers.filter((s) => !enrolled.has(s.id));
+}
+
+function removeSupplierFromProgram(supplierId, programId) {
+  const program = getProgramById(programId);
+  if (!program) return false;
+  program.enrolledSupplierIds = (program.enrolledSupplierIds || []).filter((id) => id !== supplierId);
+  const supplier = _data.suppliers.find((s) => s.id === supplierId);
+  if (supplier?.enrolledPrograms) {
+    supplier.enrolledPrograms = supplier.enrolledPrograms.filter((id) => id !== programId);
+  }
+  syncSupplierProgramMembership();
+  return true;
+}
+
+function removeFunderFromProgram(bankId, programId) {
+  const program = getProgramById(programId);
+  if (!program) return false;
+  program.enrolledFunderIds = (program.enrolledFunderIds || []).filter((id) => id !== bankId);
+  return true;
+}
+
+function updateSupplierDetails(supplierId, payload) {
+  const supplier = _data.suppliers.find((s) => s.id === supplierId);
+  if (!supplier) return null;
+  if (payload.companyName !== undefined) supplier.name = payload.companyName;
+  if (payload.pocName !== undefined) supplier.pocName = payload.pocName;
+  if (payload.designation !== undefined) supplier.designation = payload.designation;
+  if (payload.email !== undefined) supplier.email = payload.email;
+  if (payload.phone !== undefined) supplier.phone = payload.phone;
+  if (payload.status !== undefined) supplier.status = payload.status;
+  if (_demoIds) {
+    const demo = _demoIds.suppliers.find((s) => s.id === supplierId);
+    if (demo) {
+      if (payload.companyName !== undefined) demo.companyName = payload.companyName;
+      if (payload.pocName !== undefined) demo.pocName = payload.pocName;
+      if (payload.designation !== undefined) demo.designation = payload.designation;
+      if (payload.email !== undefined) demo.email = payload.email;
+      if (payload.status !== undefined) demo.status = payload.status;
+    }
+  }
+  return supplier;
+}
+
+function getFunderInviteForProgram(bankId, programId) {
+  return (_data.invitations || []).find(
+    (i) => i.entityId === bankId && i.programId === programId && i.type === 'funder'
+  );
+}
+
+function updateFunderProgramDetails(bankId, programId, payload) {
+  const bank = _data.banks.find((b) => b.id === bankId);
+  if (!bank) return null;
+  if (payload.pocName !== undefined) bank.pocName = payload.pocName;
+  if (payload.designation !== undefined) bank.designation = payload.designation;
+  if (payload.agreedRate !== undefined) bank.agreedRate = payload.agreedRate;
+  if (payload.financingLimit !== undefined) bank.financingLimit = payload.financingLimit;
+  const invite = getFunderInviteForProgram(bankId, programId);
+  if (invite) {
+    if (payload.agreedRate !== undefined) invite.agreedRate = payload.agreedRate;
+    if (payload.financingLimit !== undefined) invite.financingLimit = payload.financingLimit;
+  }
+  return bank;
+}
+
+function enrollExistingSupplierInProgram(supplierId, programId) {
+  const supplier = _data.suppliers.find((s) => s.id === supplierId);
+  if (!supplier) return false;
+  enrollSupplierInProgram(supplierId, programId);
+  return supplier;
+}
+
 function updateInvoiceStatus(invoiceId, updates) {
   const inv = getInvoiceById(invoiceId);
   if (inv) Object.assign(inv, updates);
@@ -384,6 +461,300 @@ function computeBuyerStats(invoices) {
     supplierCount: getSuppliersForBuyer(buyerId).length,
     programCount: programs.length,
   };
+}
+
+/* ── SCF Transactions ─────────────────────────────────────────── */
+
+function getTransactions() {
+  return _data.transactions || [];
+}
+
+function getTransactionById(id) {
+  return getTransactions().find((t) => t.id === id) || null;
+}
+
+function getTransactionsForRole(role) {
+  const party = _data.parties[role];
+  const txns = getTransactions();
+  if (role === 'buyer') return txns.filter((t) => t.buyerId === party.id);
+  if (role === 'supplier') return txns.filter((t) => t.supplierId === party.id);
+  if (role === 'funder') return txns.filter((t) => t.funderId === party.id);
+  return txns;
+}
+
+function updateTransactionStatus(id, updates) {
+  const txn = getTransactionById(id);
+  if (txn) Object.assign(txn, updates);
+}
+
+function updateTransactionTimeline(id, stageIndex, date) {
+  const txn = getTransactionById(id);
+  if (txn && txn.timeline && txn.timeline[stageIndex]) {
+    txn.timeline[stageIndex].completed = true;
+    txn.timeline[stageIndex].date = date;
+  }
+}
+
+function createSCFTransaction(payload) {
+  const id = `TXN-${String(getTransactions().length + 1).padStart(3, '0')}`;
+  const now = new Date().toISOString().split('T')[0];
+  const program = getProgramById(payload.programId);
+
+  const repaymentStatus = {};
+  (payload.invoiceIds || []).forEach((invId) => { repaymentStatus[invId] = 'pending'; });
+
+  const txn = {
+    id,
+    programId: payload.programId,
+    buyerId: payload.buyerId,
+    supplierId: payload.supplierId,
+    funderId: payload.funderId,
+    invoiceIds: payload.invoiceIds || [],
+    totalAmount: payload.totalAmount,
+    currency: program?.currency || 'PKR',
+    discountRate: program?.discountRate || 18.5,
+    chargesOn: program?.chargesOn || 'buyer',
+    status: 'submitted',
+    createdDate: now,
+    submittedDate: now,
+    approvedDate: null,
+    disbursedDate: null,
+    closedDate: null,
+    repaymentStatus,
+    timeline: [
+      { stage: 'Program Created', date: program?.startDate || now, completed: true },
+      { stage: 'Supplier Invited', date: now, completed: true },
+      { stage: 'Funder Onboarded', date: now, completed: true },
+      { stage: 'Program Activated', date: program?.activationDate || now, completed: true },
+      { stage: 'Transaction Created', date: now, completed: true },
+      { stage: 'Funder Approved', date: null, completed: false },
+      { stage: 'Funds Disbursed', date: null, completed: false },
+      { stage: 'Repaying', date: null, completed: false },
+      { stage: 'Transaction Closed', date: null, completed: false },
+    ],
+  };
+
+  _data.transactions.push(txn);
+
+  _data.activities.unshift({
+    id: `ACT-${Date.now()}`,
+    type: 'transaction_submitted',
+    title: `SCF Transaction ${id} submitted — ${formatAmt(payload.totalAmount, txn.currency)}`,
+    party: getCompanyName(payload.buyerId),
+    timestamp: new Date().toISOString(),
+    roles: ['buyer', 'funder', 'supplier'],
+  });
+
+  return txn;
+}
+
+function addProgram(payload) {
+  const id = `PRG-${String(_data.programs.length + 1).padStart(3, '0')}`;
+  const program = {
+    id,
+    name: payload.name,
+    buyerId: getParty('buyer').id,
+    type: 'reverse_factoring',
+    status: 'active',
+    limit: 0,
+    utilized: 0,
+    currency: 'PKR',
+    maxTenor: 90,
+    discountRate: 0,
+    startDate: new Date().toISOString().split('T')[0],
+    description: `SCF program for ${getParty('buyer').name}`,
+    enrolledSupplierIds: payload.supplierIds || [],
+    enrolledFunderIds: payload.funderIds || [],
+  };
+  _data.programs.push(program);
+  syncSupplierProgramRefs();
+  _data.activities.unshift({
+    id: `ACT-${Date.now()}`,
+    type: 'program_created',
+    title: `Program ${program.name} (${id}) created`,
+    party: getParty('buyer')?.name || 'Buyer',
+    timestamp: new Date().toISOString(),
+    roles: ['buyer'],
+  });
+  return program;
+}
+
+function createSCFProgram(payload) {
+  const id = `PRG-${String(_data.programs.length + 1).padStart(3, '0')}`;
+  const now = new Date().toISOString().split('T')[0];
+  const buyer = getParty('buyer');
+
+  const program = {
+    id,
+    name: payload.programName,
+    buyerId: buyer.id,
+    type: payload.programType || 'buyer_initiated_scf',
+    status: 'pending',
+    limit: parseFloat(payload.programLimit) || 0,
+    utilized: 0,
+    currency: payload.programCurrency || 'PKR',
+    maxTenor: parseInt(payload.programMaxTenor) || 90,
+    discountRate: parseFloat(payload.programDiscountRate) || 18.5,
+    recourse: payload.programRecourse || 'without_recourse',
+    pricing: payload.programPricing || 'agreed',
+    chargesOn: payload.programChargesOn || 'buyer',
+    startDate: now,
+    activationDate: null,
+    description: `${programTypeLabel(payload.programType || 'buyer_initiated_scf')} program — ${buyer.name}.`,
+    enrolledSupplierIds: payload.supplierInviteId ? [payload.supplierInviteId] : [],
+    enrolledFunderIds: payload.funderInviteId ? [payload.funderInviteId] : [],
+  };
+
+  _data.programs.push(program);
+
+  if (payload.supplierInviteId) {
+    _data.invitations.push({
+      id: `INVT-${Date.now()}`,
+      programId: id,
+      type: 'supplier',
+      entityId: payload.supplierInviteId,
+      entityName: getCompanyName(payload.supplierInviteId),
+      status: 'invited',
+      sentDate: now,
+      acceptedDate: null,
+      message: `You are invited to join the ${program.name} as a supplier.`,
+    });
+  }
+
+  if (payload.funderInviteId) {
+    _data.invitations.push({
+      id: `INVT-${Date.now() + 1}`,
+      programId: id,
+      type: 'funder',
+      entityId: payload.funderInviteId,
+      entityName: getCompanyName(payload.funderInviteId),
+      status: 'invited',
+      sentDate: now,
+      acceptedDate: null,
+      message: `You are invited to fund the ${program.name}.`,
+    });
+  }
+
+  _data.activities.unshift({
+    id: `ACT-${Date.now()}`,
+    type: 'program_created',
+    title: `SCF Program ${id} created by ${buyer.name}`,
+    party: buyer.name,
+    timestamp: new Date().toISOString(),
+    roles: ['buyer'],
+  });
+
+  return program;
+}
+
+/* ── Invitations ──────────────────────────────────────────────── */
+
+function getInvitations() {
+  return _data.invitations || [];
+}
+
+function getInvitationsForRole(role) {
+  const party = _data.parties[role];
+  if (role === 'supplier') {
+    return getInvitations().filter((i) => i.type === 'supplier' && i.entityId === party.id);
+  }
+  if (role === 'funder') {
+    return getInvitations().filter((i) => i.type === 'funder' && i.entityId === party.id);
+  }
+  if (role === 'buyer') {
+    const programIds = getProgramsForRole('buyer').map((p) => p.id);
+    return getInvitations().filter((i) => programIds.includes(i.programId));
+  }
+  return getInvitations();
+}
+
+function getInvitationById(id) {
+  return getInvitations().find((i) => i.id === id) || null;
+}
+
+function acceptSupplierInvitation(id, bankAccount) {
+  const inv = getInvitationById(id);
+  if (!inv) return;
+  const now = new Date().toISOString().split('T')[0];
+  inv.status = 'accepted';
+  inv.acceptedDate = now;
+  inv.bankAccount = bankAccount;
+
+  const supplier = _data.suppliers.find((s) => s.id === inv.entityId);
+  if (supplier && !supplier.enrolledPrograms.includes(inv.programId)) {
+    supplier.enrolledPrograms.push(inv.programId);
+  }
+
+  _data.activities.unshift({
+    id: `ACT-${Date.now()}`,
+    type: 'invitation_accepted',
+    title: `${getCompanyName(inv.entityId)} accepted invitation to ${getProgramById(inv.programId)?.name || inv.programId}`,
+    party: getCompanyName(inv.entityId),
+    timestamp: new Date().toISOString(),
+    roles: ['buyer', 'supplier'],
+  });
+}
+
+function activateFunderInvitation(id, limitData) {
+  const inv = getInvitationById(id);
+  if (!inv) return;
+  const now = new Date().toISOString().split('T')[0];
+  inv.status = 'accepted';
+  inv.acceptedDate = now;
+  inv.kycStatus = 'approved';
+  inv.financingLimit = parseFloat(limitData.financingLimit) || 0;
+  inv.agreedRate = parseFloat(limitData.agreedRate) || 18.5;
+
+  const bank = _data.banks.find((b) => b.id === inv.entityId);
+  if (bank) {
+    bank.kycStatus = 'approved';
+    bank.financingLimit = inv.financingLimit;
+    bank.agreedRate = inv.agreedRate;
+  }
+
+  const program = getProgramById(inv.programId);
+  if (program && program.status === 'pending') {
+    program.status = 'active';
+    program.activationDate = now;
+  }
+
+  _data.activities.unshift({
+    id: `ACT-${Date.now()}`,
+    type: 'program_activated',
+    title: `${getCompanyName(inv.entityId)} onboarded — ${program?.name} now active`,
+    party: getCompanyName(inv.entityId),
+    timestamp: new Date().toISOString(),
+    roles: ['buyer', 'funder'],
+  });
+}
+
+/* ── Repayment ────────────────────────────────────────────────── */
+
+function repayInvoice(txnId, invoiceId) {
+  const txn = getTransactionById(txnId);
+  if (!txn) return;
+  const now = new Date().toISOString().split('T')[0];
+
+  txn.repaymentStatus[invoiceId] = 'repaid';
+
+  const allRepaid = Object.values(txn.repaymentStatus).every((s) => s === 'repaid');
+  if (allRepaid && txn.status === 'repaying') {
+    txn.status = 'closed';
+    txn.closedDate = now;
+    const closedStage = txn.timeline.find((t) => t.stage === 'Transaction Closed');
+    if (closedStage) { closedStage.completed = true; closedStage.date = now; }
+    _data.activities.unshift({
+      id: `ACT-${Date.now()}`,
+      type: 'settlement',
+      title: `Transaction ${txnId} closed — all invoices repaid`,
+      party: getCompanyName(txn.buyerId),
+      timestamp: new Date().toISOString(),
+      roles: ['buyer', 'funder'],
+    });
+  }
+
+  const inv = getInvoiceById(invoiceId);
+  if (inv) inv.status = 'paid';
 }
 
 function computeFunderStats() {

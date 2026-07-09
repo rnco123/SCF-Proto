@@ -42,9 +42,22 @@ function statusBadge(status) {
     available: 'badge-approved',
     pending_review: 'badge-pending',
     active: 'badge-approved',
+    submitted: 'badge-pending',
+    repaying: 'badge-pending',
+    closed: 'badge-paid',
+    invited: 'badge-pending',
+    accepted: 'badge-approved',
+    onboarding: 'badge-pending',
+    kyc_pending: 'badge-pending',
+    kyc_approved: 'badge-approved',
   };
   const cls = map[status] || 'badge-draft';
-  const label = status.replace(/_/g, ' ');
+  const labelMap = {
+    pending_review: 'Pending Review',
+    kyc_pending: 'KYC Pending',
+    kyc_approved: 'KYC Approved',
+  };
+  const label = labelMap[status] || status.replace(/_/g, ' ');
   return `<span class="badge ${cls}">${label}</span>`;
 }
 
@@ -129,6 +142,11 @@ function activityDot(type) {
     funding_requested: 'warning',
     funds_disbursed: 'success',
     settlement: 'success',
+    transaction_submitted: 'warning',
+    program_created: 'info',
+    program_activated: 'success',
+    invitation_accepted: 'info',
+    bank_enrolled: 'info',
   };
   return map[type] || '';
 }
@@ -138,6 +156,16 @@ function programTypeLabel(type) {
     reverse_factoring: 'Reverse Factoring',
     dynamic_discounting: 'Dynamic Discounting',
     payables_finance: 'Payables Finance',
+    buyer_initiated_scf: 'Buyer-Initiated SCF',
   };
   return map[type] || type;
+}
+
+function formatPKR(amount) {
+  return 'PKR ' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(Math.round(amount));
+}
+
+function formatAmt(amount, currency) {
+  if (currency === 'PKR') return formatPKR(amount);
+  return formatCurrency(amount, currency || 'USD');
 }
